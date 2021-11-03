@@ -1,0 +1,16 @@
+            ##### TODO LIST SERVICE #####
+
+### GET ALL ###
+GET http://localhost:3000/api/todo-list/ HTTP/1.1
+
+
+### POST SINGLE ###
+POST http://localhost:3000/api/todo-list/ HTTP/1.1
+
+
+### UPDATE SINGLE ###
+PUT http://localhost:3000/api/todo-list/ HTTP/1.1
+
+
+### DELETE SINGLE ###
+DELETE http://localhost:3000/api/todo-list/ HTTP/1.1

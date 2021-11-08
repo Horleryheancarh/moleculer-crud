@@ -22,9 +22,13 @@
     "moleculer-repl": "^0.6.6"
   },
   "dependencies": {
-    "moleculer-web": "^0.10.2",
     "ioredis": "^4.27.9",
-    "moleculer": "^0.14.16"
+    "moleculer": "^0.14.16",
+    "moleculer-db": "^0.8.16",
+    "moleculer-db-adapter-sequelize": "^0.2.12",
+    "moleculer-web": "^0.10.2",
+    "pg": "^8.7.1",
+    "pg-hstore": "^2.3.4"
   },
   "engines": {
     "node": ">= 12.x.x"

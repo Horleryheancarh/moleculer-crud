@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-	name: "todo-list",
+	name: "todo",
 
 	/**
 	 * Settings
@@ -30,7 +30,7 @@ module.exports = {
 		 *
 		 * @returns array
 		 */
-		getall: {
+		getAll: {
 			rest: {
 				method: "GET",
 				path: "/"
@@ -41,18 +41,34 @@ module.exports = {
 		},
 
 		/**
+		 * Get single todo items
+		 *
+		 * @returns array
+		 */
+		getOne: {
+			rest: {
+				method: "GET",
+				path: "/:id"
+			},
+			async handler(ctx) {
+				return `Hello ${ctx.params.id}`;
+			}
+		},
+		
+
+		/**
 		 * Post single todo item
 		 *
 		 * @param {String} title - Todo title/id
 		 */
-		postsingle: {
+		postSingle: {
 			rest: {
 				method: "POST",
 				path: "/"
 			},
 			/** @param {Context} ctx  */
 			async handler(ctx) {
-				return `Post, ${ctx.params.name}`;
+				return `Post, ${ctx.body}`;
 			}
 		},
 
@@ -64,11 +80,11 @@ module.exports = {
 		updateSingle: {
 			rest: {
 				method: "PUT",
-				path: "/",
+				path: "/:id",
 			},
 			/** @param {Context} ctx  */
 			async handler(ctx) {
-				return `Put, ${ctx.params.name}`;
+				return `Put, ${ctx.params.id}`;
 			}
 		},
 
@@ -77,13 +93,13 @@ module.exports = {
 		 * 
 		 * @returns string
 		 */
-		 deletesingle: {
+		 deleteSingle: {
 			 rest: {
 				 method: "DELETE",
-				 path: "/"
+				 path: "/:id"
 			 },
 			 async handler(ctx) {
-				return `Delete, ${ctx.params.name}`;
+				return `Delete, ${ctx.params.id}`;
 			 }
 		},
 	},
@@ -113,7 +129,7 @@ module.exports = {
 	 * Service started lifecycle event handler
 	 */
 	async started() {
-		console.log("TODO service startde");
+		console.log("TODO service started");
 	},
 
 	/**

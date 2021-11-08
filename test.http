@@ -1,16 +1,42 @@
             ##### TODO LIST SERVICE #####
 
 ### GET ALL ###
-GET http://localhost:3000/api/todo-list/ HTTP/1.1
+GET http://localhost:3000/api/todo/ HTTP/1.1
 
+
+### GET SINGLE ###
+GET http://localhost:3000/api/todo/34 HTTP/1.1
 
 ### POST SINGLE ###
-POST http://localhost:3000/api/todo-list/ HTTP/1.1
+POST http://localhost:3000/api/todo/ HTTP/1.1
 
 
 ### UPDATE SINGLE ###
-PUT http://localhost:3000/api/todo-list/ HTTP/1.1
+PUT http://localhost:3000/api/todo/34 HTTP/1.1
 
 
 ### DELETE SINGLE ###
-DELETE http://localhost:3000/api/todo-list/ HTTP/1.1
+DELETE http://localhost:3000/api/todo/34 HTTP/1.1
+
+
+
+
+
+            ##### BLOG LIST SERVICE #####
+
+### GET ALL ###
+GET http://localhost:3000/api/blog/ HTTP/1.1
+
+
+### POST SINGLE ###
+POST http://localhost:3000/api/blog/ HTTP/1.1
+
+### GET SINGLE ###
+GET http://localhost:3000/api/blog/45 HTTP/1.1
+
+### UPDATE SINGLE ###
+PUT http://localhost:3000/api/blog/45 HTTP/1.1
+
+
+### DELETE SINGLE ###
+DELETE http://localhost:3000/api/blog/45 HTTP/1.1

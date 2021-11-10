@@ -70,14 +70,19 @@ module.exports = {
 				let user = ctx.params;
 				await this.validateEntity(user);
 
+				this.logger.info(user.username);
+
 				if (user.username) {
-					const found = await this.adapter.find({ username: user.username });
-					if (found.length !== 0)
+					const found = await this.adapter.find({ query: { username: user.username } });
+					this.logger.info(found.length);
+					this.logger.info(found);
+					this.logger.info(user.username);
+					if (found.length > 0)
 						throw new MoleculerClientError("Username exists", 422, "", [{ field: "Username", message: "exists" }]);
 				}
 
 				if (user.email) {
-					const found = await this.adapter.find({ email: user.email });
+					const found = await this.adapter.find({ query: { email: user.email } });
 					if (found.length !== 0)
 						throw new MoleculerClientError("Email exists", 422, "", [{ field: "email", message: "exists" }]);
 				}
@@ -107,15 +112,15 @@ module.exports = {
 				const { email, password } = ctx.params;
 
 				// this.logger.info(email);
-				const user = await this.adapter.find({ limit: 1, email });
-				if (!user)
+				const user = await this.adapter.find({ query: { email } });
+				if (user.length == 0)
 					throw new MoleculerClientError("Invalid Credentials", 422, "", [{ field: "email", message: "not found" }]);
 
 				
 				const res = await compare(password, user[0].password);
 				this.logger.info( "Response\n", res );
 				if (!res)
-					throw new MoleculerClientError("Wrong password", 422, "", [{ field: "email", message: "not found" }]);
+					throw new MoleculerClientError("Invalid Credentials", 422, "", [{ field: "email", message: "not found" }]);
                 
 				return this.generateJWT(res);
 			}
@@ -128,7 +133,7 @@ module.exports = {
          */
 		list: {
 			rest: "GET /user",
-			async handler(ctx) {
+			async handler() {
 				const all = await this.adapter.find();
 				this.logger.info(all);
 				return all;
@@ -187,3 +192,4 @@ module.exports = {
 		console.log("ACCOUNTS service stopped");
 	}
 };
+

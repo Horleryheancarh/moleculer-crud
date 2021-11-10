@@ -3,7 +3,7 @@
 
 const { MoleculerClientError } = require("moleculer").Errors;
 
-const { sign } = require("jsonwebtoken");
+const { sign, verify } = require("jsonwebtoken");
 const { hash, compare } = require("bcryptjs");
 
 const DbMixin = require("../mixins/db.mixin");
@@ -64,19 +64,19 @@ module.exports = {
 		create: {
 			rest: "POST /user",
 			params: {
-				// user: { type: "object" }
+				firstname: { type: "string", min: 2},
+				lastname: { type: "string", min: 2},
+				username: { type: "string", min: 2},
+				email: "email",
+				password: { type: "string", min: 2},
+				role: { type: "string", items: "string", enum: [ "admin", "user", "quest" ] }
 			},
 			async handler(ctx) {
 				let user = ctx.params;
 				await this.validateEntity(user);
 
-				this.logger.info(user.username);
-
 				if (user.username) {
 					const found = await this.adapter.find({ query: { username: user.username } });
-					this.logger.info(found.length);
-					this.logger.info(found);
-					this.logger.info(user.username);
 					if (found.length > 0)
 						throw new MoleculerClientError("Username exists", 422, "", [{ field: "Username", message: "exists" }]);
 				}
@@ -90,7 +90,7 @@ module.exports = {
 				user.password = await hash(user.password, 10);
 				const doc = await this.adapter.insert(user);
 
-				return this.generateJWT(doc);
+				return this.createToken(doc);
 			}
 		},
 
@@ -105,42 +105,56 @@ module.exports = {
 		login: {
 			rest: "POST /user/login",
 			params: {
-				email: { type: "string" },
+				email: { type: "email" },
 				password: { type: "string" }
 			},
 			async handler(ctx) {
 				const { email, password } = ctx.params;
 
-				// this.logger.info(email);
 				const user = await this.adapter.find({ query: { email } });
 				if (user.length == 0)
 					throw new MoleculerClientError("Invalid Credentials", 422, "", [{ field: "email", message: "not found" }]);
 
 				
 				const res = await compare(password, user[0].password);
-				this.logger.info( "Response\n", res );
 				if (!res)
 					throw new MoleculerClientError("Invalid Credentials", 422, "", [{ field: "email", message: "not found" }]);
                 
-				return this.generateJWT(res);
+				return this.createToken(res);
 			}
 		},
 
 		/**
          * Get all user
          * 
-         * 
+         * Add AUTHORIZATION
          */
-		list: {
-			rest: "GET /user",
+		getall: {
+			rest: "GET /users",
+			params: {
+				// 
+			},
 			async handler() {
-				const all = await this.adapter.find();
-				this.logger.info(all);
+				const all = await this.adapter.find({});
 				return all;
 			}
 		},
 
-
+		/**
+         * Get Single user
+         * 
+         * Add AUTHORIZATION
+         */
+		profile: {
+			rest: "GET /user/:username",
+			params: {
+				username: "string"
+			},
+			async handler(ctx) {
+				const user = await this.adapter.find({ query: { username: ctx.params.username } });
+				return user;
+			}
+		},
 	},
 
 	/**
@@ -155,20 +169,35 @@ module.exports = {
 	 */
 	methods: {
 		/**
-         * Generate JWT Token from user
+         * Create JWT Token from user
          * 
          * @param {Object} user
          */
-		generateJWT(user) {
+		createToken(user) {
 			const today = new Date();
 			const time = new Date(today);
 			time.setDate(today.getDate() + 60);
 			return sign({
-				id: user.id,
 				username: user.username,
+				two: user.username,
+				three: user.username,
+				four: user.username,
 				exp: Math.floor(time.getTime() / 1000)
 			}, this.settings.JWT_SECRET);
-		}
+		},
+        
+
+		/**
+         * Decode JWT Token
+         * 
+         * @param {String} token
+         */
+		decodeToken(token) {
+			let decodedToken = verify(token, this.settings.JWT_SECRET);
+			return decodedToken;
+		},
+
+        
 	},
 
 	/**
@@ -192,4 +221,5 @@ module.exports = {
 		console.log("ACCOUNTS service stopped");
 	}
 };
+
 

@@ -51,6 +51,7 @@ module.exports = function () {
 		model: {
 			name: "user",
 			define: {
+				// id: Sequelize.UUID,
 				firstname: Sequelize.STRING,
 				lastname: Sequelize.STRING,
 				email: Sequelize.STRING,

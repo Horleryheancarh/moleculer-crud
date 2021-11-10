@@ -6,14 +6,16 @@ const Sequelize = require("sequelize");
 
 
 module.exports = function () {
-	const schema = {
+	const postSchema = {
 		name: "posts",
+		/*
 		adapter: new SequelizeAdapter( "sql_demo", "postgres", "postgres", {
 			host: "localhost",
 			dialect: "postgres",
 			port: 5432
 		}),
-		// adapter: new SequelizeAdapter(process.env.POSTGRES_URI, { dialect: "postgres" }),
+		*/
+		adapter: new SequelizeAdapter("postgres://postgres:postgres@localhost:5432/sql_demo"),
 		mixins: [DbService],
 		model: {
 			name: "post",
@@ -35,5 +37,37 @@ module.exports = function () {
 		}
 	};
 
-	return schema;
+	const userSchema = {
+		name: "users",
+		/*
+		adapter: new SequelizeAdapter( "sql_demo", "postgres", "postgres", {
+			host: "localhost",
+			dialect: "postgres",
+			port: 5432
+		}),
+		*/
+		adapter: new SequelizeAdapter("postgres://postgres:postgres@localhost:5432/sql_demo"),
+		mixins: [DbService],
+		model: {
+			name: "user",
+			define: {
+				firstname: Sequelize.STRING,
+				lastname: Sequelize.STRING,
+				email: Sequelize.STRING,
+				username: { type: Sequelize.STRING, primaryKey: true},
+				password: Sequelize.STRING,
+				role: Sequelize.ENUM("admin", "user", "guest")
+			},
+		},
+		settings: {
+			fields: ["username", "password", "role"]
+		},
+
+		afterConnected() {
+			this.logger.info("Connected to Database Successfully");
+			// return this.adapter.clear();
+		}
+	};
+
+	return postSchema, userSchema;
 };

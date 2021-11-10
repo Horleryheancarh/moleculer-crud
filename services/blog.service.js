@@ -20,7 +20,7 @@ module.exports = {
 	/**
      * Mixins
      */
-	mixins: [DbMixin("posts")],
+	mixins: [DbMixin("postSchema")],
 
 	/**
 	 * Dependencies
@@ -32,83 +32,6 @@ module.exports = {
 	 */
 	actions: {
 
-		/**
-		 * Get all blog items
-		 *
-		 * @returns array
-		 */
-		getAll: {
-			rest: {
-				method: "GET",
-				path: "/"
-			},
-			async handler() {
-				return "Hello GetAll";
-			}
-		},
-
-		/**
-		 * Get single blog items
-		 *
-		 * @returns array
-		 */
-		getOne: {
-			rest: {
-				method: "GET",
-				path: "/:id"
-			},
-			async handler(ctx) {
-				return `Hello ${ctx.params.id}`;
-			}
-		},
-		
-
-		/**
-		 * Post single blog item
-		 *
-		 * @param {String} title - blog title/id
-		 */
-		postSingle: {
-			rest: {
-				method: "POST",
-				path: "/"
-			},
-			/** @param {Context} ctx  */
-			async handler(ctx) {
-				return `Post, ${ctx.body}`;
-			}
-		},
-
-		/**
-		 * Update single blog item
-		 * 
-		 * @returns array
-		 */
-		updateSingle: {
-			rest: {
-				method: "PUT",
-				path: "/:id",
-			},
-			/** @param {Context} ctx  */
-			async handler(ctx) {
-				return `Put, ${ctx.params.id}`;
-			}
-		},
-
-		/**
-		 * Delte single blog item
-		 * 
-		 * @returns string
-		 */
-		 deleteSingle: {
-			 rest: {
-				 method: "DELETE",
-				 path: "/:id"
-			 },
-			 async handler(ctx) {
-				return `Delete, ${ctx.params.id}`;
-			 }
-		},
 	},
 
 	/**

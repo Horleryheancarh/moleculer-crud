@@ -1,3 +1,37 @@
+            ##### USERS SERVICE #####
+
+### GET ALL USERS ###
+GET http://localhost:3000/api/user HTTP/1.1
+
+
+### CREATE USER ###
+POST http://localhost:3000/api/user HTTP/1.1
+Content-Type: application/json
+
+{
+    "firstname": "Kid",
+    "lastname": "Doe",
+    "email": "kiddoe@gmail.com",
+    "username": "kiddoe",
+    "password": "password",
+    "role": "admin"
+}
+
+
+### UPDATE USER ###
+### LOGIN USER ###
+POST http://localhost:3000/api/user/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "email": "jodoe@gmail.com",
+    "password": "password"
+}
+
+
+### DELETE USER ###
+
+
             ##### TODO LIST SERVICE #####
 
 ### GET ALL ###
@@ -22,10 +56,10 @@ DELETE http://localhost:3000/api/todo/34 HTTP/1.1
 
 
 
-            ##### BLOG LIST SERVICE #####
+            ##### BLOG SERVICE #####
 
 ### GET ALL ###
-GET http://localhost:3000/api/blog/ HTTP/1.1
+GET http://localhost:3000/api/blog HTTP/1.1
 
 
 ### POST SINGLE ###

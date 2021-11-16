@@ -133,27 +133,23 @@ module.exports = {
 			const auth = req.headers["authorization"];
 
 			if (auth && auth.startsWith("Bearer", 1)) {
-				const token = auth.slice(8);
+				const token = auth.slice(8, -1);
 
 				// Check the token. Tip: call a service which verify the token. E.g. `accounts.resolveToken`
 				const user = await ctx.call("accounts.decodeToken", { token });
 
-				this.logger.info(user);
-
-				if (user.id) {
+				if (user.username) {
 					// Returns the resolved user. It will be set to the `ctx.meta.user`
 					return user;
 
 				} else {
 					// Invalid token
-					this.logger.info("user Error");
 					throw new ApiGateway.Errors.UnAuthorizedError(ApiGateway.Errors.ERR_INVALID_TOKEN);
 				}
+			} 
 
-			} else {
-				// No token. Throw an error or do nothing if anonymous access is allowed.
-				throw new ApiGateway.Errors.UnAuthorizedError(ApiGateway.Errors.UnAuthorizedError);
-			}
+			if (req.$action.auth == "required")
+				throw new ApiGateway.Errors.UnAuthorizedError();
 		},
 
 	}

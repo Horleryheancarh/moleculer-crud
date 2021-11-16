@@ -130,10 +130,10 @@ module.exports = {
 		/**
          * Get all user
          * 
-         * Add AUTHORIZATION
+         * Add AUTHENTICATION
          */
 		getall: {
-			// auth: "required",
+			auth: "required",
 			rest: "GET /users",
 			params: {
 				// 
@@ -147,18 +147,16 @@ module.exports = {
 		/**
          * Get Single user
          * 
-         * Add AUTHORIZATION
+         * Add AUTHENTICATION
          */
 		profile: {
+			auth: "required",
 			rest: "GET /user",
-			params: {
-				token: "string"
-			},
 			async handler(ctx) {
 				try {
-					const user = await ctx.call("accounts.decodeToken", { token: ctx.params.token });
-					// this.logger.info("User : ", user);
-					return user;
+					let username = ctx.meta.user.username;
+					const all = await this.adapter.find({ query: { username } });
+					return all;
 				} catch (error) {
 					return error;
 				}
@@ -171,10 +169,6 @@ module.exports = {
          * @param {String} token
          */
 		 decodeToken: {
-			 cache: {
-				 keys: ["token"],
-				 ttl: 60 * 60
-			 },
 			params: {
 				token: "string"
 			},

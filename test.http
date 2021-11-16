@@ -2,7 +2,7 @@
 
 ### GET ALL USERS ###
 GET http://localhost:3000/api/users HTTP/1.1
-Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwiaWF0IjoxNjM2NzA5MjkxLCJleHAiOjE2MzY3MTI4OTF9._7ohFd6MVDbovbb5IIW2X16fKU6tlGfxWJxl4-e3iag"
+Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwiaWF0IjoxNjM3MDU3Mjc3LCJleHAiOjE2MzcwNjA4Nzd9.4BYfp7m0ybIY6_VFMekDioZKJeYVjeICyqtjfkCz5jU"
 
 ### CREATE USER ###
 POST http://localhost:3000/api/user HTTP/1.1
@@ -17,18 +17,9 @@ Content-Type: application/json
     "role": "user"
 }
 
-### GET USER ###
-GET http://localhost:3000/api/jadoe HTTP/1.1
-
-
 ### GET PROFILE ###
 GET http://localhost:3000/api/user HTTP/1.1
-Content-Type: application/json
-
-{
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwiaWF0IjoxNjM2NzA5MjkxLCJleHAiOjE2MzY3MTI4OTF9._7ohFd6MVDbovbb5IIW2X16fKU6tlGfxWJxl4-e3iag"
-}
-
+Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwiaWF0IjoxNjM3MDU3Mjc3LCJleHAiOjE2MzcwNjA4Nzd9.4BYfp7m0ybIY6_VFMekDioZKJeYVjeICyqtjfkCz5jU"
 
 ### LOGIN USER ###
 POST http://localhost:3000/api/user/login HTTP/1.1
@@ -41,7 +32,7 @@ Content-Type: application/json
 
 
 ### UPDATE USER ###
-PUT http://localhost:3000/api/jodoe HTTP/1.1
+PUT http://localhost:3000/api/user HTTP/1.1
 Content-Type: application/json
 
 {
@@ -50,7 +41,7 @@ Content-Type: application/json
 
 
 ### DELETE USER ###
-DELETE http://localhost:3000/api/jadoe HTTP/1.1
+DELETE http://localhost:3000/api HTTP/1.1
 
 
 

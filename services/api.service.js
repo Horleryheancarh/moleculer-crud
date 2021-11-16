@@ -42,9 +42,6 @@ module.exports = {
 				// Enable authentication. Implement the logic into `authenticate` method. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Authentication
 				authentication: true,
 
-				// Enable authorization. Implement the logic into `authorize` method. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Authorization
-				authorization: false,
-
 				// The auto-alias feature allows you to declare your route alias directly in your services.
 				// The gateway will dynamically build the full routes from service schema.
 				autoAliases: true,
@@ -135,63 +132,29 @@ module.exports = {
 			// Read the token from header
 			const auth = req.headers["authorization"];
 
-			if (auth && auth.startsWith("Bearer")) {
-				const token = auth.slice(7);
+			if (auth && auth.startsWith("Bearer", 1)) {
+				const token = auth.slice(8);
 
 				// Check the token. Tip: call a service which verify the token. E.g. `accounts.resolveToken`
-				if (token == "123456") {
+				const user = await ctx.call("accounts.decodeToken", { token });
+
+				this.logger.info(user);
+
+				if (user.id) {
 					// Returns the resolved user. It will be set to the `ctx.meta.user`
-					return { id: 1, name: "John Doe" };
+					return user;
 
 				} else {
 					// Invalid token
+					this.logger.info("user Error");
 					throw new ApiGateway.Errors.UnAuthorizedError(ApiGateway.Errors.ERR_INVALID_TOKEN);
 				}
 
 			} else {
 				// No token. Throw an error or do nothing if anonymous access is allowed.
-				// throw new E.UnAuthorizedError(E.ERR_NO_TOKEN);
-				return null;
+				throw new ApiGateway.Errors.UnAuthorizedError(ApiGateway.Errors.UnAuthorizedError);
 			}
 		},
-
-		/**
-		 * Authorize the request
-		 *
-		 * @param {Context} ctx
-		 * @param {Object} route
-		 * @param {IncomingRequest} req
-		 * @returns {Promise}
-		 */
-		async authorize(ctx, route, req) {
-			// Get token
-			let token;
-			if (req.headers.authorization) {
-				let auType = req.headers.authorization.split(" ")[0];
-				if (auType === "Bearer")
-					token = req.headers.authorization.split(" ")[1];
-			}
-
-			let id;
-			if (token) {
-				// Verify Token
-				try {
-					id = await ctx.call("user.resolveToken", { token });
-					if (id) {
-						// Return id
-						ctx.meta.userID = _.pick(id, ["id"]);
-						ctx.meta.token = token;
-					}
-				} catch (err) {
-					this.logger.info("ERROR", err);
-				}
-			}
-
-			// It check the `auth` property in action schema.
-			if (req.$action.auth == "required" && !id) {
-				throw new ApiGateway.Errors.UnAuthorizedError("NO_RIGHTS");
-			}
-		}
 
 	}
 };

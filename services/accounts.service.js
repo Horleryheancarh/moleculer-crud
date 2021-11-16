@@ -94,6 +94,8 @@ module.exports = {
 			}
 		},
 
+		
+
 		/**
          * Login user
          * 
@@ -120,7 +122,8 @@ module.exports = {
 				if (!res)
 					throw new MoleculerClientError("Invalid Credentials", 422, "", [{ field: "email", message: "not found" }]);
                 
-				return this.createToken(res);
+				const doc = await this.transformDocuments(ctx, {}, user[0]);
+				return this.createToken(doc);
 			}
 		},
 
@@ -130,11 +133,12 @@ module.exports = {
          * Add AUTHORIZATION
          */
 		getall: {
+			// auth: "required",
 			rest: "GET /users",
 			params: {
 				// 
 			},
-			async handler() {
+			async handler(ctx) {
 				const all = await this.adapter.find({});
 				return all;
 			}
@@ -146,15 +150,43 @@ module.exports = {
          * Add AUTHORIZATION
          */
 		profile: {
-			rest: "GET /user/:username",
+			rest: "GET /user",
 			params: {
-				username: "string"
+				token: "string"
 			},
 			async handler(ctx) {
-				const user = await this.adapter.find({ query: { username: ctx.params.username } });
-				return user;
+				try {
+					const user = await ctx.call("accounts.decodeToken", { token: ctx.params.token });
+					// this.logger.info("User : ", user);
+					return user;
+				} catch (error) {
+					return error;
+				}
 			}
 		},
+
+		/**
+         * Decode JWT Token
+         * 
+         * @param {String} token
+         */
+		 decodeToken: {
+			 cache: {
+				 keys: ["token"],
+				 ttl: 60 * 60
+			 },
+			params: {
+				token: "string"
+			},
+			async handler(ctx) {
+				try {
+					let decodedToken = verify(ctx.params.token, this.settings.JWT_SECRET);
+					return decodedToken;
+				} catch (error) {
+					return error;
+				}
+		   }
+	   },
 	},
 
 	/**
@@ -174,30 +206,10 @@ module.exports = {
          * @param {Object} user
          */
 		createToken(user) {
-			const today = new Date();
-			const time = new Date(today);
-			time.setDate(today.getDate() + 60);
 			return sign({
 				username: user.username,
-				two: user.username,
-				three: user.username,
-				four: user.username,
-				exp: Math.floor(time.getTime() / 1000)
-			}, this.settings.JWT_SECRET);
+			}, this.settings.JWT_SECRET, { expiresIn: 60*60 });
 		},
-        
-
-		/**
-         * Decode JWT Token
-         * 
-         * @param {String} token
-         */
-		decodeToken(token) {
-			let decodedToken = verify(token, this.settings.JWT_SECRET);
-			return decodedToken;
-		},
-
-        
 	},
 
 	/**

@@ -7,6 +7,7 @@ const { sign, verify } = require("jsonwebtoken");
 const { hash, compare } = require("bcryptjs");
 
 const DbMixin = require("../mixins/db.mixin");
+const CacheCleanerMixin = require("../mixins/cache.cleaner.mixin");
 
 /**
  * @typedef {import('moleculer').Context} Context Moleculer's Context
@@ -18,7 +19,10 @@ module.exports = {
 	/**
      * Mixins
      */
-	mixins: [DbMixin("userSchema")],
+	mixins: [
+		DbMixin("users"),
+		CacheCleanerMixin(["users"])
+	],
 
 	/**
 	 * Settings
@@ -135,10 +139,7 @@ module.exports = {
 		getall: {
 			auth: "required",
 			rest: "GET /users",
-			params: {
-				// 
-			},
-			async handler(ctx) {
+			async handler() {
 				const all = await this.adapter.find({});
 				return all;
 			}
@@ -152,14 +153,47 @@ module.exports = {
 		profile: {
 			auth: "required",
 			rest: "GET /user",
+			cache: {
+				keys: ["token"],
+				ttl: 30 * 60 // half hour
+			},
 			async handler(ctx) {
 				try {
+					// this.logger.info(ctx.param.token);
 					let username = ctx.meta.user.username;
-					const all = await this.adapter.find({ query: { username } });
-					return all;
+					const user = await this.adapter.find({ query: { username } });
+					return user;
 				} catch (error) {
 					return error;
 				}
+			}
+		},
+
+		/**
+		 * Admin Test
+		 */
+		adminTest: {
+			auth: "required",
+			admin: "required",
+			rest: "GET /admintest",
+			async handler(ctx) {
+				let user = ctx.meta.user;
+				this.logger.info("Admin Test : ", user);
+				return user;
+			}
+		},
+
+		/**
+		 * User Test
+		 */
+		 userTest: {
+			auth: "required",
+			user: "required",
+			rest: "GET /usertest",
+			async handler(ctx) {
+				let user = ctx.meta.user;
+				this.logger.info("Admin Test : ", user);
+				return user;
 			}
 		},
 
@@ -177,6 +211,7 @@ module.exports = {
 					let decodedToken = verify(ctx.params.token, this.settings.JWT_SECRET);
 					return decodedToken;
 				} catch (error) {
+					this.logger.info("decodeToken error");
 					return error;
 				}
 		   }

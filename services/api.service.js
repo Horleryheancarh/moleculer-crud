@@ -136,9 +136,10 @@ module.exports = {
 				const token = auth.slice(8, -1);
 
 				// Check the token. Tip: call a service which verify the token. E.g. `accounts.resolveToken`
-				const user = await ctx.call("accounts.decodeToken", { token });
+				let user = await ctx.call("accounts.decodeToken", { token });
 
 				if (user.username) {
+					
 					// Returns the resolved user. It will be set to the `ctx.meta.user`
 					return user;
 
@@ -152,5 +153,34 @@ module.exports = {
 				throw new ApiGateway.Errors.UnAuthorizedError();
 		},
 
+		/**
+		 * Access Control
+		 * 
+		 * @param {Object} user
+		 */
+		async accessControl(ctx, route, req) {
+		// Admin Access Control
+			if (req.$action.admin == "required") {
+				this.logger.info("Admin Access : ", ctx.meta.user.role);
+				if (ctx.meta.user.role === "admin") {
+					return ctx.meta.user;
+				} else {
+					throw new ApiGateway.Errors.UnAuthorizedError();
+				}
+			}
+
+			// User Access Control
+			if (req.$action.user == "required" ) {
+				this.logger.info("User Access : ", ctx.meta.user.role);
+				if (ctx.meta.user.role === "admin" || ctx.meta.user.role === "user") {
+					return ctx.meta.user;
+				} else {
+					throw new ApiGateway.Errors.UnAuthorizedError();
+				}
+			}
+		}
+
 	}
+
+
 };

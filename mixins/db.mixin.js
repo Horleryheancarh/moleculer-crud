@@ -14,10 +14,13 @@ module.exports = function (table) {
 		case "users":
 			model = require("../models/userSchema");
 			break;
+		
+		case "todo-items":
+			model = require("../models/todoSchema");
+			break;
 
 		default:
 			throw new Moleculer.Errors.MoleculerError("Error No Table specified");
-			// break;
 	}
 
 	const schema = {

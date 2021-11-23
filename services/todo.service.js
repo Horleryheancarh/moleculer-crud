@@ -1,6 +1,10 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 "use strict";
 
+
+const DbMixin = require("../mixins/db.mixin");
+const CacheCleanerMixin = require("../mixins/cache.cleaner.mixin");
+
 /**
  * @typedef {import('moleculer').Context} Context Moleculer's Context
  */
@@ -21,6 +25,15 @@ module.exports = {
 	dependencies: [],
 
 	/**
+     * Mixins
+     */
+	 mixins: [
+		DbMixin("todo-items"),
+		CacheCleanerMixin(["todo-item"])
+	],
+
+
+	/**
 	 * Actions
 	 */
 	actions: {
@@ -30,13 +43,10 @@ module.exports = {
 		 *
 		 * @returns array
 		 */
-		getAll: {
-			rest: {
-				method: "GET",
-				path: "/"
-			},
-			async handler() {
-				return "Hello GetAll";
+		list: {
+			rest: "GET /",
+			async handler(ctx) {
+				return ctx.params;
 			}
 		},
 
@@ -45,10 +55,10 @@ module.exports = {
 		 *
 		 * @returns array
 		 */
-		getOne: {
-			rest: {
-				method: "GET",
-				path: "/:id"
+		get: {
+			rest: "GET /:id",
+			params: {
+				id: { type: "uuid" }
 			},
 			async handler(ctx) {
 				return `Hello ${ctx.params.id}`;
@@ -61,12 +71,8 @@ module.exports = {
 		 *
 		 * @param {String} title - Todo title/id
 		 */
-		postSingle: {
-			rest: {
-				method: "POST",
-				path: "/"
-			},
-			/** @param {Context} ctx  */
+		create: {
+			rest: "POST /",
 			async handler(ctx) {
 				return `Post, ${ctx.body}`;
 			}
@@ -77,12 +83,11 @@ module.exports = {
 		 * 
 		 * @returns array
 		 */
-		updateSingle: {
-			rest: {
-				method: "PUT",
-				path: "/:id",
+		update: {
+			rest: "PUT /:id",
+			params: {
+				id: { type: "uuid" }
 			},
-			/** @param {Context} ctx  */
 			async handler(ctx) {
 				return `Put, ${ctx.params.id}`;
 			}
@@ -93,15 +98,16 @@ module.exports = {
 		 * 
 		 * @returns string
 		 */
-		 deleteSingle: {
-			 rest: {
-				 method: "DELETE",
-				 path: "/:id"
-			 },
-			 async handler(ctx) {
+		remove: {
+			rest: "DELETE /:id",
+			params: {
+				id: { type: "uuid" }
+			},
+			async handler(ctx) {
 				return `Delete, ${ctx.params.id}`;
-			 }
+			}
 		},
+
 	},
 
 	/**

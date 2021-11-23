@@ -1,9 +1,9 @@
 "use strict";
 
-module.exports = function(serviceNames) {
+module.exports = function(eventNames) {
 	const events = {};
 
-	serviceNames.forEach(name => {
+	eventNames.forEach(name => {
 		events[`cache.clean.${name}`] = function() {
 			if (this.broker.cacher) {
 				this.logger.debug(`Clear local '${this.name}' cache`);

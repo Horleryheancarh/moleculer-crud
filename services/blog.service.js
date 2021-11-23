@@ -54,8 +54,8 @@ module.exports = {
 		 * 
 		 * @returns {Object} Post created
 		 */
-		read: {
-			// rest: "GET /",
+		create: {
+			rest: "POST /",
 			params: {
 				author: { type: "string" },
 				title: { type: "string" },
@@ -70,7 +70,11 @@ module.exports = {
 				if (checkPost.length > 0)
 					throw new MoleculerClientError("Title already exists");
 				
-				const post = await this.adapter.insert(newPost);
+				// Insert into Database
+				// const post = await this.adapter.insert(newPost);
+
+				// Moleculer defined function
+				const post = await this._create(ctx, newPost);
 
 				return post;
 			}
@@ -85,7 +89,7 @@ module.exports = {
 		 * 
 		 * @returns {Object} Post updated
 		 */
-		send: {
+		update: {
 			// rest: "GET /:id",
 			params: {
 				id: { type: "uuid" },
@@ -98,9 +102,13 @@ module.exports = {
 				await this.validateEntity(newPost);
 
 				const checkPost = await this.adapter.find({ query: { id: newPost.id } });
-				if (checkPost > 0) {
-					if (newPost.author === checkPost.author){
-						let updatedPost = await this.adapter.updateById(newPost.id, { $set: { newPost } });
+				if (checkPost.length > 0) {
+					if (newPost.author == checkPost[0].author){
+						// Update
+						// let updatedPost = await this.adapter.updateById(newPost.id, { $set: { newPost } });
+
+						// Moleculer Defined Function
+						let updatedPost = await this._update(ctx, ctx.params);
 
 						return updatedPost;
 					} else {
@@ -116,15 +124,57 @@ module.exports = {
 		/**
 		 * Get all Posts
 		 * 
-		 * @todo
-		 * Add filters
+		 * 
 		 */
-		crap: {
-			async handler() {
-				const allPosts = await this.adapter.find({});
+		list: {
+			cache: {
+				keys: ["url"],
+				ttl: 60 // A minute
+			},
+			async handler(ctx) {
+				let params = await this.sanitizeParams(ctx, ctx.params);
+				const allPosts = await this._list(ctx, params);
 				return allPosts;
 			}
 		},
+
+		/**
+		 * Get Single Post
+		 * 
+		 * @actions
+		 * @param {id} Id - Post Id
+		 * 
+		 * @returns {Object} Post
+		 */
+		get: {
+			cache: {
+				keys: ["url"],
+				ttl: 60 // A minute
+			},
+			async handler(ctx) {
+				let params = await this.sanitizeParams(ctx, ctx.params);
+				const post = await this._get(ctx, params);
+				return post;
+			}
+		},
+
+		/**
+		 * Delete Single Post
+		 * 
+		 * @actions
+		 * @param {id} Id - Post Id
+		 * 
+		 * @returns {Object} Post
+		 */
+		remove: {
+			params: {
+				id: { type: "uuid" }
+			},
+			async handler(ctx) {
+				const post = await this._remove(ctx, ctx.params);
+				return post;
+			}
+		}
 	},
 
 	/**

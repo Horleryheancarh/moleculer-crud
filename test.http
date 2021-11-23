@@ -81,19 +81,26 @@ GET http://localhost:3000/api/blog HTTP/1.1
 
 ### POST SINGLE ###
 POST http://localhost:3000/api/blog HTTP/1.1
-# Content-Type: application/json
+Content-Type: application/json
 
-# {
-#     "author": "Jane Doe",
-#     "title": "Lorem Dipsum",
-#     "content": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit quia consequuntur eius dolorem tenetur architecto explicabo reprehenderit ullam enim qui placeat ipsa, minima totam eos maxime earum rem. Dolore, fuga."
-# }
+{
+    "author": "Jane Doe",
+    "title": "Lorem Dipsum4",
+    "content": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit quia consequuntur eius dolorem tenetur architecto explicabo reprehenderit ullam enim qui placeat ipsa, minima totam eos maxime earum rem. Dolore, fuga."
+}
 
 ### GET SINGLE ###
-GET http://localhost:3000/api/blog/45 HTTP/1.1
+GET http://localhost:3000/api/blog/0b07e59c-e9db-4ffd-99a3-917183088c52 HTTP/1.1
 
 ### UPDATE SINGLE ###
-PUT http://localhost:3000/api/blog/45 HTTP/1.1
+PUT http://localhost:3000/api/blog/0b07e59c-e9db-4ffd-99a3-917183088c52 HTTP/1.1
+Content-Type: application/json
+
+{
+    "title": "Chill Fool",
+    "author": "Jane Doe",
+    "content": "I just made this up, its shitty I know"
+}
 
 ### DELETE SINGLE ###
-DELETE http://localhost:3000/api/blog/45 HTTP/1.1
+DELETE http://localhost:3000/api/blog/11532759-8acc-4be4-9115-1ed6749916db HTTP/1.1

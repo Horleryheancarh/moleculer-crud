@@ -27,10 +27,7 @@ module.exports = {
 	/**
      * Mixins
      */
-	 mixins: [
-		DbMixin("todo-items"),
-		CacheCleanerMixin(["todo-item"])
-	],
+	 mixins: [DbMixin("todo-items")],
 
 
 	/**

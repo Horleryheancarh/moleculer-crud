@@ -7,7 +7,6 @@ const { sign, verify } = require("jsonwebtoken");
 const { hash, compare } = require("bcryptjs");
 
 const DbMixin = require("../mixins/db.mixin");
-const CacheCleanerMixin = require("../mixins/cache.cleaner.mixin");
 
 /**
  * @typedef {import('moleculer').Context} Context Moleculer's Context
@@ -19,10 +18,7 @@ module.exports = {
 	/**
      * Mixins
      */
-	mixins: [
-		DbMixin("users"),
-		CacheCleanerMixin(["users"])
-	],
+	mixins: [DbMixin("users")],
 
 	/**
 	 * Settings
@@ -126,8 +122,8 @@ module.exports = {
 				if (!res)
 					throw new MoleculerClientError("Invalid Credentials", 422, "", [{ field: "email", message: "not found" }]);
                 
-				const doc = await this.transformDocuments(ctx, {}, user[0]);
-				return this.createToken(doc);
+				// const doc = await this.transformDocuments(ctx, {}, user[0]);
+				return this.createToken(user[0]);
 			}
 		},
 
@@ -178,7 +174,6 @@ module.exports = {
 			rest: "GET /admintest",
 			async handler(ctx) {
 				let user = ctx.meta.user;
-				this.logger.info("Admin Test : ", user);
 				return user;
 			}
 		},
@@ -192,7 +187,6 @@ module.exports = {
 			rest: "GET /usertest",
 			async handler(ctx) {
 				let user = ctx.meta.user;
-				this.logger.info("Admin Test : ", user);
 				return user;
 			}
 		},
@@ -237,6 +231,7 @@ module.exports = {
 		createToken(user) {
 			return sign({
 				username: user.username,
+				role: user.role
 			}, this.settings.JWT_SECRET, { expiresIn: 60*60 });
 		},
 	},

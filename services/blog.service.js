@@ -4,7 +4,6 @@
 const { MoleculerClientError } = require("moleculer").Errors;
 
 const DbMixin = require("../mixins/db.mixin");
-const CacheCleanerMixin = require("../mixins/cache.cleaner.mixin");
 
 /**
  * @typedef {import('moleculer').Context} Context Moleculer's Context
@@ -32,10 +31,7 @@ module.exports = {
 	/**
      * Mixins
      */
-	mixins: [
-		DbMixin("posts"),
-		CacheCleanerMixin(["posts"])
-	],
+	mixins: [DbMixin("posts")],
 
 	/**
 	 * Dependencies

@@ -42,6 +42,9 @@ module.exports = {
 				// Enable authentication. Implement the logic into `authenticate` method. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Authentication
 				authentication: true,
 
+				// Enable authorization. Implement the logic into `authorize` method. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Authorization
+				authorization: true,
+
 				// The auto-alias feature allows you to declare your route alias directly in your services.
 				// The gateway will dynamically build the full routes from service schema.
 				autoAliases: true,
@@ -132,11 +135,13 @@ module.exports = {
 			// Read the token from header
 			const auth = req.headers["authorization"];
 
-			if (auth && auth.startsWith("Bearer", 1)) {
-				const token = auth.slice(8, -1);
+			if (auth && auth.startsWith("Bearer", )) {
+				const token = auth.slice(7);
 
 				// Check the token. Tip: call a service which verify the token. E.g. `accounts.resolveToken`
 				let user = await ctx.call("accounts.decodeToken", { token });
+
+				// this.logger.info(token);
 
 				if (user.username) {
 					
@@ -158,10 +163,9 @@ module.exports = {
 		 * 
 		 * @param {Object} user
 		 */
-		async accessControl(ctx, route, req) {
+		async authorize(ctx, route, req) {
 		// Admin Access Control
 			if (req.$action.admin == "required") {
-				this.logger.info("Admin Access : ", ctx.meta.user.role);
 				if (ctx.meta.user.role === "admin") {
 					return ctx.meta.user;
 				} else {
@@ -171,7 +175,6 @@ module.exports = {
 
 			// User Access Control
 			if (req.$action.user == "required" ) {
-				this.logger.info("User Access : ", ctx.meta.user.role);
 				if (ctx.meta.user.role === "admin" || ctx.meta.user.role === "user") {
 					return ctx.meta.user;
 				} else {

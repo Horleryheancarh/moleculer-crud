@@ -2,7 +2,7 @@
 
 ### GET ALL USERS ###
 GET http://localhost:3000/api/users HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwiaWF0IjoxNjM3ODE4NTQ2LCJleHAiOjE2Mzc4MjIxNDZ9.WLrTDB-yESICIIjZ0KSFAtxadFAc0LLYx7h9x9I2VlE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM3OTEyNzI2LCJleHAiOjE2Mzc5MTYzMjZ9.SQL65DKNpq7Hcso2EzvVJT_PMRSgCkms6zYr7pySvL0
 
 ### CREATE USER ###
 POST http://localhost:3000/api/user HTTP/1.1
@@ -19,7 +19,7 @@ Content-Type: application/json
 
 ### GET PROFILE ###
 GET http://localhost:3000/api/user HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM3ODIwMTk2LCJleHAiOjE2Mzc4MjM3OTZ9.Muu0Qm8xBFAs3OTYOVK8ybuJm804vXDZWFymkki_oO8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM3OTEyNzI2LCJleHAiOjE2Mzc5MTYzMjZ9.SQL65DKNpq7Hcso2EzvVJT_PMRSgCkms6zYr7pySvL0
 
 ### LOGIN USER ###
 POST http://localhost:3000/api/user/login HTTP/1.1
@@ -45,7 +45,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZ
 
 ### USER TEST ###
 GET http://localhost:3000/api/usertest HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM3ODIwMTk2LCJleHAiOjE2Mzc4MjM3OTZ9.Muu0Qm8xBFAs3OTYOVK8ybuJm804vXDZWFymkki_oO8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM3OTAwNjg2LCJleHAiOjE2Mzc5MDQyODZ9.yJKBa4DdqwtRGAUjcweISOXDTAFFqhVGvwenetxh6KQ
 
 ### DELETE USER ###
 DELETE http://localhost:3000/api HTTP/1.1
@@ -56,18 +56,32 @@ DELETE http://localhost:3000/api HTTP/1.1
 
 ### GET ALL ###
 GET http://localhost:3000/api/todo/ HTTP/1.1
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM3ODUwNTkyLCJleHAiOjE2Mzc4NTQxOTJ9.TQjuw9qmekKcj3Z3XG_51qN0XOU_8O0gT4Erv-d5qgc
 
 ### GET SINGLE ###
-GET http://localhost:3000/api/todo/34 HTTP/1.1
+GET http://localhost:3000/api/todo/e8fa3989-2e09-4a52-96e5-a276e33231d8 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM3OTM1NzM2LCJleHAiOjE2Mzc5MzkzMzZ9.1DsTzgpNI4SnvEs6Mt9swHOfkb_FhWiimhSDwa-4QIs
 
 ### POST SINGLE ###
 POST http://localhost:3000/api/todo/ HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM3OTM1NzM2LCJleHAiOjE2Mzc5MzkzMzZ9.1DsTzgpNI4SnvEs6Mt9swHOfkb_FhWiimhSDwa-4QIs
+Content-Type: application/json
+
+{
+    "title": "Grocery",
+    "description": "What I need in my kitchen and house",
+    "todoItems": ["Salt", "Maggi", "Pepper", "Detergent"]
+}
 
 
 ### UPDATE SINGLE ###
-PUT http://localhost:3000/api/todo/34 HTTP/1.1
+PUT http://localhost:3000/api/todo/e8fa3989-2e09-4a52-96e5-a276e33231d8 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM3OTM1NzM2LCJleHAiOjE2Mzc5MzkzMzZ9.1DsTzgpNI4SnvEs6Mt9swHOfkb_FhWiimhSDwa-4QIs
+Content-Type: application/json
 
+{
+    "todoItems": ["Sugar", "Garri", "Bar Soap"]
+}
 
 ### DELETE SINGLE ###
 DELETE http://localhost:3000/api/todo/34 HTTP/1.1
@@ -104,3 +118,7 @@ Content-Type: application/json
 
 ### DELETE SINGLE ###
 DELETE http://localhost:3000/api/blog/11532759-8acc-4be4-9115-1ed6749916db HTTP/1.1
+
+
+###
+GET http://localhost:3000/api/api/list-aliases HTTP/1.1

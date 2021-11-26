@@ -135,8 +135,8 @@ module.exports = {
 		getall: {
 			auth: "required",
 			rest: "GET /users",
-			async handler() {
-				const all = await this.adapter.find({});
+			async handler(ctx) {
+				const all = await this._list(ctx, ctx.params);
 				return all;
 			}
 		},
@@ -155,9 +155,10 @@ module.exports = {
 			},
 			async handler(ctx) {
 				try {
-					// this.logger.info(ctx.param.token);
-					let username = ctx.meta.user.username;
-					const user = await this.adapter.find({ query: { username } });
+					let username = await this.sanitizeParams(ctx.meta);
+					const user = await this._get(ctx, username);
+					this.logger.info(username);
+					console.log("Hello World");
 					return user;
 				} catch (error) {
 					return error;

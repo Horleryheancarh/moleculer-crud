@@ -3,9 +3,9 @@
 const Sequelize = require("sequelize");
 
 module.exports = {
-	name: "todo-items",
+	name: "todoitems",
 	model: {
-		name: "todo-item",
+		name: "todoitem",
 		define: {
 			id: { 
 				type: Sequelize.UUID,
@@ -14,12 +14,13 @@ module.exports = {
 				allowNull: false
 			},
 			title: Sequelize.STRING,
-			author: Sequelize.STRING,
+			description: Sequelize.STRING,
+			username: Sequelize.STRING,
 			todoItems: Sequelize.ARRAY(Sequelize.STRING)
 		},
 
 	},
 	settings: {
-		fields: ["id", "title", "content", "author"]
+		fields: ["id", "title", "description", "todoItems"]
 	},
 };

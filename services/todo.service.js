@@ -2,8 +2,9 @@
 "use strict";
 
 
+const { MoleculerClientError } = require("moleculer").Errors;
+
 const DbMixin = require("../mixins/db.mixin");
-const CacheCleanerMixin = require("../mixins/cache.cleaner.mixin");
 
 /**
  * @typedef {import('moleculer').Context} Context Moleculer's Context
@@ -27,7 +28,7 @@ module.exports = {
 	/**
      * Mixins
      */
-	 mixins: [DbMixin("todo-items")],
+	 mixins: [DbMixin("todoitems")],
 
 
 	/**
@@ -41,9 +42,11 @@ module.exports = {
 		 * @returns array
 		 */
 		list: {
+			auth: "required",
 			rest: "GET /",
 			async handler(ctx) {
-				return ctx.params;
+				const items = this.adapter.find({ query : { username: ctx.meta.user.username } });
+				return items;
 			}
 		},
 
@@ -53,12 +56,14 @@ module.exports = {
 		 * @returns array
 		 */
 		get: {
+			auth: "required",
 			rest: "GET /:id",
 			params: {
 				id: { type: "uuid" }
 			},
 			async handler(ctx) {
-				return `Hello ${ctx.params.id}`;
+				const res = await this._get(ctx, ctx.params);
+				return res;
 			}
 		},
 		
@@ -69,9 +74,26 @@ module.exports = {
 		 * @param {String} title - Todo title/id
 		 */
 		create: {
+			auth: "required",
 			rest: "POST /",
+			params: {
+				title: "string",
+				description: "string",
+				todoItems: "array"
+			},
 			async handler(ctx) {
-				return `Post, ${ctx.body}`;
+				const item = ctx.params;
+				item.username = ctx.meta.user.username;
+				await this.validateEntity(item);
+
+				let checkItem = await this.adapter.find({ query : { title: item.title  } });
+
+				if (checkItem.length > 0)
+					throw new MoleculerClientError("Title already exists");
+				
+				const newItem = await this._create(ctx, item);
+				
+				return newItem;
 			}
 		},
 
@@ -81,12 +103,25 @@ module.exports = {
 		 * @returns array
 		 */
 		update: {
+			auth: "required",
 			rest: "PUT /:id",
 			params: {
 				id: { type: "uuid" }
 			},
 			async handler(ctx) {
-				return `Put, ${ctx.params.id}`;
+				const item = ctx.params;
+				item.username = ctx.meta.user.username;
+
+				this.logger.info(item);
+
+				let checkItem = await this.adapter.find({ query : { id: item.id, username: item.username }});
+
+				if (checkItem.length > 0) {
+					const upItem = await this._update(ctx, ctx.params);
+					return upItem;
+				} else {
+					throw new MoleculerClientError("Unable To Update Item for some reasons");
+				}
 			}
 		},
 
@@ -96,12 +131,15 @@ module.exports = {
 		 * @returns string
 		 */
 		remove: {
+			auth: "required",
 			rest: "DELETE /:id",
 			params: {
 				id: { type: "uuid" }
 			},
 			async handler(ctx) {
-				return `Delete, ${ctx.params.id}`;
+				const item = ctx.params;
+				item.username = ctx.meta.user.username;
+				return item;
 			}
 		},
 

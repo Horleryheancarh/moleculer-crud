@@ -16,7 +16,11 @@ module.exports = function (table) {
 			break;
 		
 		case "todoitems":
-			model = require("../models/todoSchema");
+			model = require("../models/noteSchema");
+			break;
+		
+		case "notes":
+			model = require("../models/noteSchema");
 			break;
 
 		default:

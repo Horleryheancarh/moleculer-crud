@@ -2,7 +2,7 @@
 
 const ApiGateway = require("moleculer-web");
 
-const _ = require("lodash");
+// const _ = require("lodash");
 
 /**
  * @typedef {import('moleculer').Context} Context Moleculer's Context

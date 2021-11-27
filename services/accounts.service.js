@@ -45,11 +45,6 @@ module.exports = {
 	},
 
 	/**
-	 * Dependencies
-	 */
-	dependencies: [],
-
-	/**
 	 * Actions
 	 */
 	actions: {
@@ -211,13 +206,6 @@ module.exports = {
 				}
 		   }
 	   },
-	},
-
-	/**
-	 * Events
-	 */
-	events: {
-
 	},
 
 	/**

@@ -14,18 +14,6 @@ module.exports = {
 	name: "note",
 
 	/**
-	 * Settings
-	 */
-	settings: {
-
-	},
-
-	/**
-	 * Dependencies
-	 */
-	dependencies: [],
-
-	/**
      * Mixins
      */
 	 mixins: [DbMixin("notes")],
@@ -37,7 +25,7 @@ module.exports = {
 	actions: {
 
 		/**
-		 * Get all todo items
+		 * Get all notes
 		 *
 		 * @returns array
 		 */
@@ -45,13 +33,13 @@ module.exports = {
 			auth: "required",
 			rest: "GET /",
 			async handler(ctx) {
-				const items = this.adapter.find({ query : { username: ctx.meta.user.username } });
-				return items;
+				const notes = await this.adapter.find({ query : { username: ctx.meta.user.username } });
+				return notes;
 			}
 		},
 
 		/**
-		 * Get single todo items
+		 * Get single note
 		 *
 		 * @returns array
 		 */
@@ -62,16 +50,25 @@ module.exports = {
 				id: { type: "uuid" }
 			},
 			async handler(ctx) {
-				const res = await this._get(ctx, ctx.params);
-				return res;
+				let params = ctx.params;
+				params.username = ctx.meta.user.username;
+
+				let check = await this.adapter.find({ query: { id: params.id, username: params.username }});
+
+				if (check.length == 1 ) {
+					let note = await this._get(ctx, ctx.params);
+					return note;
+				} else {
+					throw new MoleculerClientError("Unable to get for some reasons");
+				}
 			}
 		},
 		
 
 		/**
-		 * Post single todo item
+		 * Post single note
 		 *
-		 * @param {String} title - Todo title/id
+		 * @param {String} title - Note title/id
 		 */
 		create: {
 			auth: "required",
@@ -79,26 +76,26 @@ module.exports = {
 			params: {
 				title: "string",
 				description: "string",
-				todoItems: "array"
+				notes: "string"
 			},
 			async handler(ctx) {
-				const item = ctx.params;
-				item.username = ctx.meta.user.username;
-				await this.validateEntity(item);
+				const note = ctx.params;
+				note.username = ctx.meta.user.username;
+				await this.validateEntity(note);
 
-				let checkItem = await this.adapter.find({ query : { title: item.title  } });
+				let check = await this.adapter.find({ query : { title: note.title  } });
 
-				if (checkItem.length > 0)
+				if (check.length == 1)
 					throw new MoleculerClientError("Title already exists");
 				
-				const newItem = await this._create(ctx, item);
+				const newNote = await this._create(ctx, note);
 				
-				return newItem;
+				return newNote;
 			}
 		},
 
 		/**
-		 * Update single todo item
+		 * Update single note
 		 * 
 		 * @returns array
 		 */
@@ -109,24 +106,24 @@ module.exports = {
 				id: { type: "uuid" }
 			},
 			async handler(ctx) {
-				const item = ctx.params;
-				item.username = ctx.meta.user.username;
+				const note = ctx.params;
+				note.username = ctx.meta.user.username;
 
-				this.logger.info(item);
+				this.logger.info(note);
 
-				let checkItem = await this.adapter.find({ query : { id: item.id, username: item.username }});
+				let check = await this.adapter.find({ query : { id: note.id, username: note.username }});
 
-				if (checkItem.length > 0) {
-					const upItem = await this._update(ctx, ctx.params);
-					return upItem;
+				if (check.length == 1) {
+					const upNote = await this._update(ctx, ctx.params);
+					return upNote;
 				} else {
-					throw new MoleculerClientError("Unable To Update Item for some reasons");
+					throw new MoleculerClientError("Unable To Update note for some reasons");
 				}
 			}
 		},
 
 		/**
-		 * Delte single todo item
+		 * Delte single  note
 		 * 
 		 * @returns string
 		 */
@@ -137,46 +134,42 @@ module.exports = {
 				id: { type: "uuid" }
 			},
 			async handler(ctx) {
-				const item = ctx.params;
-				item.username = ctx.meta.user.username;
-				return item;
+				const delNote = ctx.params;
+				delNote.username = ctx.meta.user.username;
+
+				let check = await this.adapter.find({ query: { id: delNote.id, username: delNote.username} });
+
+				if (check.length == 1) {
+					const note = await this._remove(ctx, delNote);
+					return note;
+				} else {
+					throw new MoleculerClientError("Unable to Delete Note");
+				}
+				
 			}
 		},
 
 	},
 
-	/**
-	 * Events
-	 */
-	events: {
-
-	},
-
-	/**
-	 * Methods
-	 */
-	methods: {
-
-	},
 
 	/**
 	 * Service created lifecycle event handler
 	 */
 	created() {
-		console.log("TODO service created");
+		console.log("NOTE service created");
 	},
 
 	/**
 	 * Service started lifecycle event handler
 	 */
 	async started() {
-		console.log("TODO service started");
+		console.log("NOTE service started");
 	},
 
 	/**
 	 * Service stopped lifecycle event handler
 	 */
 	async stopped() {
-		console.log("TODO service stopped");
+		console.log("NOTE service stopped");
 	}
 };

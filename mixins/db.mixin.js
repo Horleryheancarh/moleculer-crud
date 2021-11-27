@@ -15,8 +15,8 @@ module.exports = function (table) {
 			model = require("../models/userSchema");
 			break;
 		
-		case "todoitems":
-			model = require("../models/noteSchema");
+		case "todoItems":
+			model = require("../models/todoSchema");
 			break;
 		
 		case "notes":

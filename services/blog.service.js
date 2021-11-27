@@ -13,30 +13,9 @@ module.exports = {
 	name: "blog",
 
 	/**
-	 * Settings
-	 */
-	settings: {
-
-		// Output fields
-		fields: ["id", "title", "author"],
-
-		// Validator Schema
-		postValidator: {
-			title: { type: "string" },
-			content: { type: "string" },
-			author: { type: "string" }
-		}
-	},
-
-	/**
      * Mixins
      */
 	mixins: [DbMixin("posts")],
-
-	/**
-	 * Dependencies
-	 */
-	dependencies: [],
 
 	/**
 	 * Actions
@@ -86,7 +65,6 @@ module.exports = {
 		 * @returns {Object} Post updated
 		 */
 		update: {
-			// rest: "GET /:id",
 			params: {
 				id: { type: "uuid" },
 				author: { type: "string" },
@@ -171,20 +149,6 @@ module.exports = {
 				return post;
 			}
 		}
-	},
-
-	/**
-	 * Events
-	 */
-	events: {
-
-	},
-
-	/**
-	 * Methods
-	 */
-	methods: {
-
 	},
 
 	/**

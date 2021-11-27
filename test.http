@@ -52,40 +52,40 @@ DELETE http://localhost:3000/api HTTP/1.1
 
 
 
-            ##### NOTE SERVICE #####
+            ##### TODO SERVICE #####
 
 ### GET ALL ###
 GET http://localhost:3000/api/todo/ HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM3ODUwNTkyLCJleHAiOjE2Mzc4NTQxOTJ9.TQjuw9qmekKcj3Z3XG_51qN0XOU_8O0gT4Erv-d5qgc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM4MDM2NTA2LCJleHAiOjE2MzgwNDAxMDZ9.ashS3RHTn2JXK_VoKH3nJMtak68xA5CjYoXuX-RzcS4
 
 ### GET SINGLE ###
-GET http://localhost:3000/api/todo/e8fa3989-2e09-4a52-96e5-a276e33231d8 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM3OTM1NzM2LCJleHAiOjE2Mzc5MzkzMzZ9.1DsTzgpNI4SnvEs6Mt9swHOfkb_FhWiimhSDwa-4QIs
+GET http://localhost:3000/api/todo/ea3d3aa5-714c-49b8-be4a-cf2265ea96d6 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM4MDM2NTA2LCJleHAiOjE2MzgwNDAxMDZ9.ashS3RHTn2JXK_VoKH3nJMtak68xA5CjYoXuX-RzcS4
 
 ### POST SINGLE ###
 POST http://localhost:3000/api/todo/ HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM3OTM1NzM2LCJleHAiOjE2Mzc5MzkzMzZ9.1DsTzgpNI4SnvEs6Mt9swHOfkb_FhWiimhSDwa-4QIs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM4MDM2NTA2LCJleHAiOjE2MzgwNDAxMDZ9.ashS3RHTn2JXK_VoKH3nJMtak68xA5CjYoXuX-RzcS4
 Content-Type: application/json
 
 {
-    "title": "Grocery",
-    "description": "What I need in my kitchen and house",
-    "todoItems": ["Salt", "Maggi", "Pepper", "Detergent"]
+    "done": false,
+    "details": "What I need in my kitchen and house",
+    "dueDate": "2021-12-06"
 }
 
 
 ### UPDATE SINGLE ###
-PUT http://localhost:3000/api/todo/e8fa3989-2e09-4a52-96e5-a276e33231d8 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM3OTM1NzM2LCJleHAiOjE2Mzc5MzkzMzZ9.1DsTzgpNI4SnvEs6Mt9swHOfkb_FhWiimhSDwa-4QIs
+PUT http://localhost:3000/api/todo/ea3d3aa5-714c-49b8-be4a-cf2265ea96d6 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM4MDM2NTA2LCJleHAiOjE2MzgwNDAxMDZ9.ashS3RHTn2JXK_VoKH3nJMtak68xA5CjYoXuX-RzcS4
 Content-Type: application/json
 
 {
-    "todoItems": ["Sugar", "Garri", "Bar Soap"]
+    "done": true
 }
 
 ### DELETE SINGLE ###
-DELETE http://localhost:3000/api/todo/34 HTTP/1.1
-
+DELETE http://localhost:3000/api/todo/aa602511-ce7d-456a-962f-c13844b38a54 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM4MDM2NTA2LCJleHAiOjE2MzgwNDAxMDZ9.ashS3RHTn2JXK_VoKH3nJMtak68xA5CjYoXuX-RzcS4
 
 
             ##### BLOG SERVICE #####
@@ -122,3 +122,40 @@ DELETE http://localhost:3000/api/blog/11532759-8acc-4be4-9115-1ed6749916db HTTP/
 
 ###
 GET http://localhost:3000/api/api/list-aliases HTTP/1.1
+
+
+            ##### NOTE SERVICE #####
+
+### GET ALL ###
+GET http://localhost:3000/api/note HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM4MDM2NTA2LCJleHAiOjE2MzgwNDAxMDZ9.ashS3RHTn2JXK_VoKH3nJMtak68xA5CjYoXuX-RzcS4
+
+### GET SINGLE ###
+GET http://localhost:3000/api/note/0c234fe7-7a09-4c0b-b3b2-9697fd23984a HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM4MDM2NTA2LCJleHAiOjE2MzgwNDAxMDZ9.ashS3RHTn2JXK_VoKH3nJMtak68xA5CjYoXuX-RzcS4
+
+### POST SINGLE ###
+POST http://localhost:3000/api/note HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM4MDM2NTA2LCJleHAiOjE2MzgwNDAxMDZ9.ashS3RHTn2JXK_VoKH3nJMtak68xA5CjYoXuX-RzcS4
+Content-Type: application/json
+
+{
+    "title": "Hello World",
+    "description": "Always the first",
+    "notes": "Always the first point in any programming language"
+}
+
+
+### UPDATE SINGLE ###
+PUT http://localhost:3000/api/note/0c234fe7-7a09-4c0b-b3b2-9697fd23984a HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM4MDM2NTA2LCJleHAiOjE2MzgwNDAxMDZ9.ashS3RHTn2JXK_VoKH3nJMtak68xA5CjYoXuX-RzcS4
+Content-Type: application/json
+
+{
+    "notes": "We need to change that narrative"
+}
+
+
+### REMOVE SINGLE ###
+DELETE http://localhost:3000/api/note/f7a29b4c-7e6c-4eec-b69b-5ca7b9508a0f HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImphZG9lIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjM4MDM2NTA2LCJleHAiOjE2MzgwNDAxMDZ9.ashS3RHTn2JXK_VoKH3nJMtak68xA5CjYoXuX-RzcS4
